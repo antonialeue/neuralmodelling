@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 
 ## SECONDARY CONDITIONING
 
-s1 = np.ones(100)                                        # stimulus 1
-s2 = np.concatenate( (np.zeros(50), np.ones(50)) )       # stimulus 2
-rewards = np.concatenate( (np.ones(50), np.zeros(50)) )  # rewards
+s1 = np.ones(100)                                       # stimulus 1
+s2 = np.concatenate( (np.zeros(50), np.ones(50)) )      # stimulus 2
+rewards = np.concatenate( (np.ones(50), np.zeros(50)) ) # rewards
 
-expectations_w1 = 1 - np.exp(-0.1 * np.arange(100))                                     # idealised weights of stimulus 1
-expectations_w2 = np.concatenate( (np.zeros(50), 1 - np.exp(-0.1 * np.arange(50))) )    # idealised weights of stimulus 2
+expectations =  1 - np.exp(-0.1 * np.arange(100))       # idealised expectation of reward
 
 w1 = np.empty(100)      # weight array for stimulus 1
 w2 = np.empty(100)      # weight array for stimulus 2
@@ -26,11 +25,16 @@ for i in range(1, len(s1)):
     w2[i] = w2[i-1] + e * d * s2[i]
 
 # plotting
+plt.axvline(49, color="grey", linestyle="dashed")
+plt.axvline(99, color="grey", linestyle="dashed")
 plt.plot(w1, color="blue", label="Learned weights of stimulus 1")
 plt.plot(w2, color="red", label="Learned weights of stimulus 2")
-plt.plot(expectations_w1, color="blue", linestyle="dotted", linewidth="4", label="Idealised weights of stimulus 1")
-plt.plot(expectations_w2, color="red", linestyle="dotted", linewidth="4", label="Idealised weights of stimulus 2")
-plt.title("Secondary conditioning: Idealised expectations and learned expectations")
+plt.plot(expectations, color="limegreen", linestyle="dashed", linewidth="1", label="Idealised expectations of reward")
+plt.plot(100, w1[-1], "ro", color="blue", label="Result (stimulus 1)")
+plt.plot(100, w2[-1], "ro", color="red", label="Result (stimulus 2)")
+plt.text(15, 0.1, "Pre-training", color="grey")
+plt.text(70, 0.1, "Training", color="grey")
+plt.title("Secondary conditioning: Idealised expectation of reward and learned weights")
 plt.xlabel("Trials")
 plt.ylabel("Weight")
 plt.legend(loc="best")
